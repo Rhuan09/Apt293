@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>946556306244-d9s9fie7hamb9i7cqbc68olnfavmjf2n.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.946556306244-d9s9fie7hamb9i7cqbc68olnfavmjf2n</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCD6FZQPERCkLRWqCC4kgCbC_H-gTEShxU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>946556306244</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.att2Flutter</string>
+	<key>PROJECT_ID</key>
+	<string>apt293-4f9ac</string>
+	<key>STORAGE_BUCKET</key>
+	<string>apt293-4f9ac.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:946556306244:ios:bfc4308c96f7fe43520d11</string>
+	<key>DATABASE_URL</key>
+	<string>https://apt293-4f9ac-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

@@ -1,9 +1,10 @@
-import 'package:att_2_flutter/MyApp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:att_2_flutter/MyApp.dart';
+import 'package:att_2_flutter/Moveis.dart';
+import 'package:att_2_flutter/GastosFixos.dart';
+import 'package:att_2_flutter/GastosVariaveis.dart';
 import 'package:att_2_flutter/Usuario.dart';
-import 'Moveis.dart';
-import 'GastosFixos.dart';
-import 'GastosVariaveis.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -24,36 +25,42 @@ class AppDrawer extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
-              children: const [
+              children: [
                 NavItem(
                   text: 'Home',
                   icon: Icons.home,
-                  screen: MyApp(),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
                 ),
                 NavItem(
                   text: 'Móveis',
                   icon: Icons.chair,
-                  screen: Moveis(),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/moveis');
+                  },
                 ),
                 NavItem(
                   text: 'Gastos Fixos',
                   icon: Icons.money_off,
-                  screen: GastosFixos(),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/gastosFixos');
+                  },
                 ),
                 NavItem(
                   text: 'Gastos Variáveis',
                   icon: Icons.attach_money,
-                  screen: GastosVariaveis(),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, '/gastosVariaveis');
+                  },
                 ),
                 NavItem(
                   text: 'Sair',
                   icon: Icons.logout,
-                  //Momentaneo
-                  screen: Usuario(),
-                  // Lemnbrar de colocar a lógica do Disconect aqui depois:
-                  // onTap: () {
-                  //     Navigator.of(context).pushNamed('/login');
-                  //  },
+                  onTap: () {
+                    // Implemente a lógica de logout aqui
+                    Navigator.pushReplacementNamed(context, '/login');
+                  },
                 ),
               ],
             ),
@@ -67,15 +74,12 @@ class AppDrawer extends StatelessWidget {
 class NavItem extends StatelessWidget {
   final String text;
   final IconData? icon;
-  final Widget? screen;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
   const NavItem({
-    super.key,
     required this.text,
     this.icon,
-    this.screen,
-    this.onTap,
+    required this.onTap,
   });
 
   @override
@@ -83,18 +87,7 @@ class NavItem extends StatelessWidget {
     return ListTile(
       leading: Icon(icon),
       title: Text(text),
-      onTap: onTap ??
-          () {
-            Navigator.of(context).pop();
-            Navigator.of(context).push(_Page(screen!));
-          },
+      onTap: onTap,
     );
   }
-}
-
-class _Page extends MaterialPageRoute<void> {
-  _Page(Widget screen)
-      : super(builder: (BuildContext context) {
-          return screen;
-        });
 }

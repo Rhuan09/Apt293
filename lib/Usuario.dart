@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'moveis_bloc.dart';
 import 'MyApp.dart';
 
 class Usuario extends StatefulWidget {
@@ -14,7 +14,7 @@ class Usuario extends StatefulWidget {
 class _UsuarioState extends State<Usuario> {
   final _usernameController = TextEditingController();
   late Box<String> _userBox;
-
+  late final MoveisBloc moveisBloc;
   @override
   void initState() {
     super.initState();
@@ -97,7 +97,8 @@ class _UsuarioState extends State<Usuario> {
                   final username = _usernameController.text;
                   if (username.isNotEmpty) {
                     await _saveUsername(username);
-                    Navigator.of(context).push(_Page(MyApp()));
+                    Navigator.of(context)
+                        .push(_Page(MyApp(moveisBloc: moveisBloc)));
                   }
                 },
                 style: ElevatedButton.styleFrom(

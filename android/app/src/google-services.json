@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "946556306244",
+    "firebase_url": "https://apt293-4f9ac-default-rtdb.firebaseio.com",
+    "project_id": "apt293-4f9ac",
+    "storage_bucket": "apt293-4f9ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946556306244:android:d78655e5ddd417f2520d11",
+        "android_client_info": {
+          "package_name": "com.example.att_2_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946556306244-hj2nvmkv7hf82a927pvv4nlv2f2skcmv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6kWKsNxLcnQOWsEfKyIMppnyy_YTI7VQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946556306244-hj2nvmkv7hf82a927pvv4nlv2f2skcmv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
