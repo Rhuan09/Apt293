@@ -48,10 +48,10 @@ class Moveis extends StatelessWidget {
             ),
           ),
           const PopupMenuItem<String>(
-            value: 'pesquisar',
+            value: 'editar',
             child: ListTile(
-              leading: Icon(Icons.search),
-              title: Text('Pesquisar'),
+              leading: Icon(Icons.edit),
+              title: Text('Editar'),
             ),
           ),
           const PopupMenuItem<String>(
@@ -65,8 +65,8 @@ class Moveis extends StatelessWidget {
         onSelected: (String value) {
           if (value == 'adicionar') {
             _adicionarMovel(context, ScaffoldMessenger.of(context));
-          } else if (value == 'pesquisar') {
-            // Código para pesquisar um móvel
+          } else if (value == 'editar') {
+            _editarMovel(context, ScaffoldMessenger.of(context));
           } else if (value == 'excluir') {
             _excluirMovel(context, ScaffoldMessenger.of(context));
           }
@@ -114,6 +114,66 @@ class Moveis extends StatelessWidget {
                 Navigator.pop(context);
               },
               child: const Text("Adicionar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _editarMovel(
+      BuildContext context, ScaffoldMessengerState scaffoldMessenger) {
+    String nomeMovelAntigo =
+        ''; // Variável para armazenar o valor antigo do campo de texto
+    String nomeMovelNovo =
+        ''; // Variável para armazenar o novo valor do campo de texto
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Editar Móvel"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                onChanged: (value) {
+                  nomeMovelAntigo =
+                      value; // Atualiza o valor antigo do campo de texto
+                },
+                decoration:
+                    const InputDecoration(hintText: "Nome do móvel antigo"),
+              ),
+              TextFormField(
+                onChanged: (value) {
+                  nomeMovelNovo =
+                      value; // Atualiza o novo valor do campo de texto
+                },
+                decoration:
+                    const InputDecoration(hintText: "Nome do móvel novo"),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                BlocProvider.of<MoveisBloc>(context).add(AtualizarMovelEvent(
+                    nomeMovelAntigo,
+                    nomeMovelNovo)); // Passa os valores antigo e novo do campo de texto para o evento
+                scaffoldMessenger.showSnackBar(const SnackBar(
+                  content: Text('Item atualizado com sucesso!'),
+                  backgroundColor: Colors.blue,
+                  duration: Duration(seconds: 2),
+                ));
+                Navigator.pop(context);
+              },
+              child: const Text("Atualizar"),
             ),
           ],
         );

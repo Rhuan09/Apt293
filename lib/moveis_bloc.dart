@@ -5,10 +5,13 @@ class MoveisBloc extends Bloc<MoveisEvent, MoveisState> {
   final MoveisDataProvider _dataProvider;
 
   MoveisBloc(this._dataProvider) : super(MoveisInitial()) {
+    initialize();
+
     on<AdicionarMovelEvent>((event, emit) async {
       try {
         await _dataProvider.adicionarMovel(event.nomeMovel);
-        emit(MovelAdicionadoState());
+        final moveis = await _dataProvider.listarMoveis();
+        emit(MoveisListadosState(moveis: moveis));
       } catch (e) {
         emit(MovelErrorState(message: 'Erro ao adicionar móvel.'));
       }
@@ -26,7 +29,9 @@ class MoveisBloc extends Bloc<MoveisEvent, MoveisState> {
     on<RemoverMovelEvent>((event, emit) async {
       try {
         await _dataProvider.removerMovel(event.nomeMovel);
-        emit(MovelRemovidoState());
+        final moveis = await _dataProvider.listarMoveis();
+
+        emit(MoveisListadosState(moveis: moveis));
       } catch (e) {
         emit(MovelErrorState(message: 'Erro ao remover móvel.'));
       }
@@ -36,11 +41,31 @@ class MoveisBloc extends Bloc<MoveisEvent, MoveisState> {
       try {
         await _dataProvider.atualizarMovel(
             event.nomeMovelAntigo, event.nomeMovelNovo);
-        emit(MovelAtualizadoState());
+        final moveis = await _dataProvider.listarMoveis();
+
+        emit(MoveisListadosState(moveis: moveis));
       } catch (e) {
         emit(MovelErrorState(message: 'Erro ao atualizar móvel.'));
       }
     });
+
+    void loadMoveis() async {
+      try {
+        final moveis = await _dataProvider.listarMoveis();
+        emit(MoveisListadosState(moveis: moveis));
+      } catch (e) {
+        emit(MovelErrorState(message: 'Erro ao listar móveis.'));
+      }
+    }
+  }
+
+  void initialize() async {
+    try {
+      final moveis = await _dataProvider.listarMoveis();
+      emit(MoveisListadosState(moveis: moveis));
+    } catch (e) {
+      emit(MovelErrorState(message: 'Erro ao listar móveis.'));
+    }
   }
 }
 // Events
