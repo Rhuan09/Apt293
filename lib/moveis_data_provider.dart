@@ -1,52 +1,36 @@
-import 'package:dio/dio.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MoveisDataProvider {
-  final Dio _dio = Dio();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> adicionarMovel(String nomeMovel) async {
     try {
-      final response = await _dio.post(
-        'https://apt293-4f9ac-default-rtdb.firebaseio.com/moveis.json',
-        data: {'nome': nomeMovel},
-      );
-      // Processar a resposta se necessário
+      await _firestore.collection('moveis').add({'nome': nomeMovel});
     } catch (e) {
-      // Tratar erros
+      print(e);
       throw Exception('Erro ao adicionar móvel.');
     }
   }
 
   Future<List<String>> listarMoveis() async {
     try {
-      final response = await _dio
-          .get('https://apt293-4f9ac-default-rtdb.firebaseio.com/moveis.json');
-      final data = response.data as Map<String, dynamic>;
-      final moveis = data.values.map((item) => item['nome'] as String).toList();
+      final snapshot = await _firestore.collection('moveis').get();
+      final moveis = snapshot.docs.map((doc) => doc['nome'] as String).toList();
       return moveis;
     } catch (e) {
-      // Tratar erros
+      print(e);
       throw Exception('Erro ao listar móveis.');
     }
   }
 
   Future<void> removerMovel(String nomeMovel) async {
     try {
-      final response = await _dio
-          .get('https://apt293-4f9ac-default-rtdb.firebaseio.com/moveis.json');
-      final data = response.data as Map<String, dynamic>;
-
-      String? itemId;
-
-      data.forEach((key, value) {
-        if (value['nome'] == nomeMovel) {
-          itemId = key;
-        }
-      });
-
-      if (itemId != null) {
-        final deleteResponse = await _dio.delete(
-            'https://apt293-4f9ac-default-rtdb.firebaseio.com/moveis/$itemId.json');
-        // Processar a resposta se necessário
+      final snapshot = await _firestore
+          .collection('moveis')
+          .where('nome', isEqualTo: nomeMovel)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.delete();
       } else {
         throw Exception('Móvel não encontrado.');
       }
@@ -59,24 +43,12 @@ class MoveisDataProvider {
   Future<void> atualizarMovel(
       String nomeMovelAntigo, String nomeMovelNovo) async {
     try {
-      final response = await _dio
-          .get('https://apt293-4f9ac-default-rtdb.firebaseio.com/moveis.json');
-      final data = response.data as Map<String, dynamic>;
-
-      String? itemId;
-
-      data.forEach((key, value) {
-        if (value['nome'] == nomeMovelAntigo) {
-          itemId = key;
-        }
-      });
-
-      if (itemId != null) {
-        final updateResponse = await _dio.patch(
-          'https://apt293-4f9ac-default-rtdb.firebaseio.com/moveis/$itemId.json',
-          data: {'nome': nomeMovelNovo},
-        );
-        // Processar a resposta se necessário
+      final snapshot = await _firestore
+          .collection('moveis')
+          .where('nome', isEqualTo: nomeMovelAntigo)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        await snapshot.docs.first.reference.update({'nome': nomeMovelNovo});
       } else {
         throw Exception('Móvel não encontrado.');
       }

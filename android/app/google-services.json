@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "946556306244-hj2nvmkv7hf82a927pvv4nlv2f2skcmv.apps.googleusercontent.com",
+          "client_id": "946556306244-7in43o457cffsfatou06tkvu2etnjvt2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -28,8 +28,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "946556306244-hj2nvmkv7hf82a927pvv4nlv2f2skcmv.apps.googleusercontent.com",
+              "client_id": "946556306244-7in43o457cffsfatou06tkvu2etnjvt2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "946556306244-d9s9fie7hamb9i7cqbc68olnfavmjf2n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.att2Flutter"
+              }
             }
           ]
         }

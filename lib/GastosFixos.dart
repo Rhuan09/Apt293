@@ -6,34 +6,7 @@ import 'dart:async';
 import 'dart:io';
 import 'drawer.dart';
 
-class GastosFixos extends StatefulWidget {
-  const GastosFixos({Key? key}) : super(key: key);
-
-  @override
-  _GastosFixosState createState() => _GastosFixosState();
-}
-
-class _GastosFixosState extends State<GastosFixos> {
-  final Box<double> _box = Hive.box("_box");
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  /* Future<void> _abrirBox() async {
-    final appDocumentDir =
-        await path_provider.getApplicationDocumentsDirectory();
-    Hive.init(appDocumentDir.path);
-    // _box = await Hive.openBox<double>('myBox');
-  } */
-
-  /* @override
-  void dispose() {
-    _box.close();
-    super.dispose();
-  } */
-
+class GastosFixos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,13 +129,6 @@ class _GastosFixosState extends State<GastosFixos> {
   void _adicionarLuz(BuildContext context) async {
     double? valorLuz;
 
-    if (_box.get("valorLuz") == null) {
-      _box.put("valorLuz", 0);
-      valorLuz = _box.get("valorLuz");
-    } else {
-      valorLuz = _box.get("valorLuz");
-    }
-
     const snackBar = SnackBar(
       content: Text('Conta de luz adicionada com sucesso!'),
       backgroundColor: Colors.green,
@@ -186,7 +152,6 @@ class _GastosFixosState extends State<GastosFixos> {
                     onChanged: (double value) {
                       setState(() {
                         valorLuz = value;
-                        _box.put('valorLuz', valorLuz!);
                       });
                     },
                     min: 0.0,
@@ -197,7 +162,6 @@ class _GastosFixosState extends State<GastosFixos> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    _box.put('valorLuz', valorLuz!);
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     Navigator.pop(context);
                   },
