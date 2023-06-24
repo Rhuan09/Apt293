@@ -1,3 +1,5 @@
+import 'package:att_2_flutter/Blocs/apartamentos_bloc.dart';
+import 'package:att_2_flutter/DataProviders/apartamentos_data_provider.dart';
 import 'package:att_2_flutter/GastosFixos.dart';
 import 'package:att_2_flutter/GastosVariaveis.dart';
 import 'Login.dart';
@@ -11,17 +13,21 @@ import 'Moveis.dart'; // Importe o arquivo moveis.dart
 import 'moveis_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'moveis_data_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'selectapartment.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   await Firebase.initializeApp();
   runApp(
     MultiProvider(
       providers: [
         BlocProvider(
           create: (context) => MoveisBloc(MoveisDataProvider()),
+        ),
+        // Adiciona um BlocProvider para o ApartmentBloc
+        BlocProvider(
+          create: (context) => ApartmentBloc(ApartamentosDataProvider(),
+              FirebaseAuth.instance.currentUser!.uid),
         ),
       ],
       child: MyApp(),
@@ -41,55 +47,15 @@ class MyApp extends StatelessWidget {
         '/': (context) => StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
-                print(
-                    'Alteração no estado de autenticação: ${snapshot.data?.email}');
                 if (snapshot.connectionState == ConnectionState.active) {
                   if (snapshot.hasData) {
                     // O usuário está autenticado
-                    return Scaffold(
-                      appBar: AppBar(
-                        centerTitle: true,
-                        title: const Text('Apto 293'),
-                        backgroundColor: const Color(0xff764abc),
-                      ),
-                      drawer: AppDrawer(),
-                      body: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/logo293.png',
-                              width: 200,
-                              height: 200,
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              'Apto 293',
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'O app perfeito para organizar a vida em um apartamento compartilhado. Cadastre seus móveis, divida os gastos fixos e variáveis, e mantenha um histórico das compras conjuntas. Tudo de forma simples e fácil!',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
+                    // Mostra a tela SelectApartmentScreen
+                    return SelectApartmentScreen();
                   } else {
                     // O usuário não está autenticado
-                    // Redireciona para a tela de login
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                    return Container();
+                    // Mostra a tela de login
+                    return Login();
                   }
                 } else {
                   // O estado de autenticação ainda não está estabilizado
