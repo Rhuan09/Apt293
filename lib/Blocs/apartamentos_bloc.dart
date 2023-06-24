@@ -7,30 +7,39 @@ class ApartmentBloc extends Bloc<ApartmentEvent, ApartmentState> {
   final String userId;
 
   ApartmentBloc(this.dataProvider, this.userId)
-      : super(ApartmentState([], null));
+      : super(ApartmentState([], null)) {
+    print('ApartmentBloc constructor called with userId: $userId');
 
-  @override
-  Stream<ApartmentState> mapEventToState(ApartmentEvent event) async* {
-    if (event is LoadApartments) {
+    on<LoadApartments>((event, emit) async {
+      print('Handling LoadApartments event');
       // Carrega os apartamentos do usuário do Cloud Firestore
       List<String> apartments = await dataProvider.getApartments(userId);
-      yield ApartmentState(apartments, state.selectedApartment);
-    } else if (event is AddApartment) {
+      emit(ApartmentState(apartments, state.selectedApartment));
+    });
+
+    on<AddApartment>((event, emit) async {
+      print('Handling AddApartment event');
       // Adiciona um novo apartamento ao Cloud Firestore
       await dataProvider.addApartment(userId, event.apartment);
       List<String> apartments = List.from(state.apartments)
         ..add(event.apartment);
-      yield ApartmentState(apartments, state.selectedApartment);
-    } else if (event is RemoveApartment) {
+      emit(ApartmentState(apartments, state.selectedApartment));
+    });
+
+    on<RemoveApartment>((event, emit) async {
+      print('Handling RemoveApartment event');
       // Remove um apartamento do Cloud Firestore
       await dataProvider.removeApartment(userId, event.apartment);
       List<String> apartments = List.from(state.apartments)
         ..remove(event.apartment);
-      yield ApartmentState(apartments, state.selectedApartment);
-    } else if (event is SelectApartment) {
+      emit(ApartmentState(apartments, state.selectedApartment));
+    });
+
+    on<SelectApartment>((event, emit) {
+      print('Handling SelectApartment event');
       // Atualiza o estado do apartamento selecionado
-      yield ApartmentState(state.apartments, event.apartment);
-    }
+      emit(ApartmentState(state.apartments, event.apartment));
+    });
   }
 }
 

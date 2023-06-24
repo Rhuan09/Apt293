@@ -1,19 +1,17 @@
-import 'package:att_2_flutter/Blocs/apartamentos_bloc.dart';
 import 'package:att_2_flutter/DataProviders/apartamentos_data_provider.dart';
 import 'package:att_2_flutter/GastosFixos.dart';
 import 'package:att_2_flutter/GastosVariaveis.dart';
 import 'Login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'drawer.dart';
 import 'package:provider/provider.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Moveis.dart'; // Importe o arquivo moveis.dart
 import 'moveis_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'moveis_data_provider.dart';
 import 'selectapartment.dart';
+import 'Blocs/apartamentos_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
