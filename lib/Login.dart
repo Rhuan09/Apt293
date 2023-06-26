@@ -1,3 +1,4 @@
+import 'package:att_2_flutter/createaccount.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'MyApp.dart';
@@ -96,6 +97,27 @@ class _LoginState extends State<Login> {
                       const EdgeInsets.symmetric(horizontal: 60, vertical: 12),
                 ),
                 child: const Text('Entrar',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Redireciona para a tela de cadastro
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterScreen()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 60, vertical: 12),
+                ),
+                child: const Text('Criar conta',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

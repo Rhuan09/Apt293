@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.att_2_flutter.app-mergeDebugResources-15:/values-v16/values-v16.xml",
+            "outputFile": "com.example.att_2_flutter.app-mergeDebugResources-26:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\rhuan\\.gradle\\caches\\transforms-3\\ae42e6c01585f28a5adeac7499fca147\\transformed\\core-1.6.0\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\rhuan\\.gradle\\caches\\transforms-3\\c66a84034fdee472d77a2fc15f5cce5d\\transformed\\core-1.10.1\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

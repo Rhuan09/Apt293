@@ -1,40 +1,23 @@
+import 'package:att_2_flutter/colors.dart';
 import 'package:flutter/material.dart';
-import 'bottomnavigationbar.dart';
 
-class AppScaffold extends StatefulWidget {
-  final int currentIndex;
+class CustomScaffold extends StatefulWidget {
   final List<Widget> screens;
-  final ValueChanged<int> onScreenChanged;
+  final List<BottomNavigationBarItem> bottomNavigationBarItems;
 
-  const AppScaffold({
+  const CustomScaffold({
     Key? key,
-    required this.currentIndex,
     required this.screens,
-    required this.onScreenChanged,
+    required this.bottomNavigationBarItems,
   }) : super(key: key);
 
   @override
-  _AppScaffoldState createState() => _AppScaffoldState();
+  _CustomScaffoldState createState() => _CustomScaffoldState();
 }
 
-class _AppScaffoldState extends State<AppScaffold> {
+class _CustomScaffoldState extends State<CustomScaffold> {
+  int _currentIndex = 0;
   final PageController _pageController = PageController();
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController.addListener(() {
-      if (_pageController.page!.round() != widget.currentIndex) {
-        widget.onScreenChanged(_pageController.page!.round());
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +25,32 @@ class _AppScaffoldState extends State<AppScaffold> {
       body: PageView(
         controller: _pageController,
         children: widget.screens,
-      ),
-      bottomNavigationBar: AppBottomNavigationBar(
-        currentIndex: widget.currentIndex,
-        onTap: (index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        backgroundColor: AppColors.textColor,
+        selectedItemColor: AppColors.primaryColor,
+        unselectedItemColor: AppColors.textColorsumindo,
+        selectedFontSize: 18,
+        unselectedFontSize: 14,
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+            _pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          });
+        },
+        items: widget.bottomNavigationBarItems,
       ),
     );
   }

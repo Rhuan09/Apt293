@@ -12,20 +12,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'moveis_data_provider.dart';
 import 'selectapartment.dart';
 import 'Blocs/apartamentos_bloc.dart';
+import 'homescreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  final moveisDataProvider = MoveisDataProvider();
+  final apartamentosDataProvider = ApartamentosDataProvider();
+
   runApp(
-    MultiProvider(
+    MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => MoveisBloc(MoveisDataProvider()),
+          create: (context) => MoveisBloc(moveisDataProvider),
         ),
-        // Adiciona um BlocProvider para o ApartmentBloc
         BlocProvider(
-          create: (context) => ApartmentBloc(ApartamentosDataProvider(),
-              FirebaseAuth.instance.currentUser!.uid),
+          create: (context) =>
+              ApartmentBloc(apartamentosDataProvider, 'userId'),
         ),
       ],
       child: MyApp(),
@@ -40,33 +44,36 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Apto 293",
-      initialRoute: '/',
-      routes: {
-        '/': (context) => StreamBuilder<User?>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.active) {
-                  if (snapshot.hasData) {
-                    // O usuário está autenticado
-                    // Mostra a tela SelectApartmentScreen
-                    return SelectApartmentScreen();
-                  } else {
-                    // O usuário não está autenticado
-                    // Mostra a tela de login
-                    return Login();
-                  }
-                } else {
-                  // O estado de autenticação ainda não está estabilizado
-                  // Mostra um indicador de progresso
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-        '/moveis': (context) => Moveis(),
-        '/login': (context) => Login(),
-        '/gastosFixos': (context) => GastosFixos(),
-        '/gastosariaveis': (context) => GastosVariaveis(),
-      },
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) {
+              // O usuário está autenticado
+              // Verifica se um apartamento foi selecionado
+              String? selectedApartment =
+                  context.read<ApartmentBloc>().state.selectedApartment;
+              if (selectedApartment != null) {
+                // Um apartamento foi selecionado
+                // Mostra a tela HomeScreen
+                return HomeScreen();
+              } else {
+                // Nenhum apartamento foi selecionado
+                // Mostra a tela SelectApartmentScreen
+                return SelectApartmentScreen();
+              }
+            } else {
+              // O usuário não está autenticado
+              // Mostra a tela de login
+              return Login();
+            }
+          } else {
+            // O estado de autenticação ainda não está estabilizado
+            // Mostra um indicador de progresso
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }

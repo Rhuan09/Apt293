@@ -1,9 +1,17 @@
+import 'package:att_2_flutter/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'moveis_bloc.dart';
 import 'drawer.dart';
+import 'Blocs/apartamentos_bloc.dart';
+import 'dart:async';
+import 'moveis_data_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Moveis extends StatelessWidget {
+  // Adicione esta linha
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,29 +20,40 @@ class Moveis extends StatelessWidget {
         title: const Text(
           'Móveis',
         ),
-        backgroundColor: const Color(0xff764abc),
+        backgroundColor: AppColors.textColor,
       ),
-      drawer: const AppDrawer(),
-      body: BlocBuilder<MoveisBloc, MoveisState>(
-        builder: (context, state) {
-          if (state is MoveisListadosState) {
-            return ListView.builder(
-              itemCount: state.moveis.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(state.moveis[index]),
+      body: BlocBuilder<ApartmentBloc, ApartmentState>(
+        builder: (context, apartmentState) {
+          // Acessa o apartamento selecionado a partir do estado do ApartmentBloc
+          String? selectedApartment = apartmentState.selectedApartment;
+
+          return FutureBuilder<List<Map<String, dynamic>>>(
+            future: _getMoveis(context, selectedApartment),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<Map<String, dynamic>> moveis = snapshot.data!;
+                return ListView.builder(
+                  itemCount: moveis.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: moveis[index]['imageUrl'] != null
+                          ? Image.network(moveis[index]['imageUrl'])
+                          : null,
+                      title: Text(moveis[index]['name']),
+                    );
+                  },
                 );
-              },
-            );
-          } else if (state is MovelErrorState) {
-            return Center(
-              child: Text(state.message),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(snapshot.error.toString()),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          );
         },
       ),
       floatingActionButton: PopupMenuButton<String>(
@@ -72,153 +91,231 @@ class Moveis extends StatelessWidget {
           }
         },
         tooltip: 'Opções',
-        elevation: 4.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
       ),
     );
   }
 
-  void _adicionarMovel(
-      BuildContext context, ScaffoldMessengerState scaffoldMessenger) {
-    String nomeMovel = ''; // Variável para armazenar o valor do campo de texto
+  Future<List<Map<String, dynamic>>> _getMoveis(
+      BuildContext context, String? apartment) async {
+    // Acessa o MoveisBloc
+    MoveisBloc moveisBloc = BlocProvider.of<MoveisBloc>(context);
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Adicionar Móvel"),
-          content: TextFormField(
-            onChanged: (value) {
-              nomeMovel = value; // Atualiza o valor do campo de texto
-            },
-            decoration: const InputDecoration(hintText: "Nome do móvel"),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () {
-                BlocProvider.of<MoveisBloc>(context).add(AdicionarMovelEvent(
-                    nomeMovel)); // Passa o valor do campo de texto para o evento
-                scaffoldMessenger.showSnackBar(const SnackBar(
-                  content: Text('Item adicionado com sucesso!'),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 2),
-                ));
-                Navigator.pop(context);
-              },
-              child: const Text("Adicionar"),
-            ),
-          ],
-        );
-      },
-    );
+    // Cria um Completer para aguardar a resposta do MoveisBloc
+    Completer<List<Map<String, dynamic>>> completer = Completer();
+
+    // Adiciona um listener ao MoveisBloc para aguardar a resposta
+    StreamSubscription subscription = moveisBloc.stream.listen((state) {
+      if (state is MoveisListadosState) {
+        // Completa o Completer com a lista de móveis retornada pelo MoveisBloc
+        completer.complete(state.moveis);
+      } else if (state is MovelErrorState) {
+        // Completa o Completer com um erro se ocorrer um erro ao obter a lista de móveis
+        completer.completeError(state.message);
+      }
+    });
+
+    // Envia um evento ListarMoveisEvent para o MoveisBloc para obter a lista de móveis
+    moveisBloc.add(ListarMoveisEvent(apartment!)); // Use a variável userId aqui
+
+    // Aguarda a resposta do MoveisBloc
+    List<Map<String, dynamic>> moveis = await completer.future;
+
+    // Cancela o listener do MoveisBloc
+    await subscription.cancel();
+
+    return moveis;
   }
+}
 
-  void _editarMovel(
-      BuildContext context, ScaffoldMessengerState scaffoldMessenger) {
-    String nomeMovelAntigo =
-        ''; // Variável para armazenar o valor antigo do campo de texto
-    String nomeMovelNovo =
-        ''; // Variável para armazenar o novo valor do campo de texto
+void _adicionarMovel(
+    BuildContext context, ScaffoldMessengerState scaffoldMessenger) {
+  String nomeMovel = ''; // Variável para armazenar o valor do campo de texto
+  XFile? imagemMovel; // Variável para armazenar a imagem do móvel
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Editar Móvel"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                onChanged: (value) {
-                  nomeMovelAntigo =
-                      value; // Atualiza o valor antigo do campo de texto
+  // Define as variáveis userId e apartmentId com os valores corretos
+  final apartmentBloc = BlocProvider.of<ApartmentBloc>(context);
+  final apartmentId = apartmentBloc.state.selectedApartment;
+
+  // Cria um ImagePicker
+  final ImagePicker _picker = ImagePicker();
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: const Text("Adicionar Móvel"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  onChanged: (value) {
+                    nomeMovel = value; // Atualiza o valor do campo de texto
+                  },
+                  decoration: const InputDecoration(hintText: "Nome do móvel"),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    // Verifica se o aplicativo tem permissão para acessar a galeria de fotos
+                    var status = await Permission.photos.status;
+                    if (status.isDenied) {
+                      // Solicita permissão para acessar a galeria de fotos
+                      status = await Permission.photos.request();
+                    }
+
+                    if (status.isGranted) {
+                      // Abre a galeria de fotos para o usuário escolher uma imagem
+                      final XFile? image =
+                          await _picker.pickImage(source: ImageSource.gallery);
+
+                      // Atualiza a variável imagemMovel com a imagem escolhida pelo usuário
+                      setState(() {
+                        imagemMovel = image;
+                      });
+                    } else {
+                      // Exibe uma mensagem de erro se o usuário não conceder permissão
+                      scaffoldMessenger.showSnackBar(const SnackBar(
+                        content:
+                            Text('Permissão para acessar a galeria negada.'),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
+                      ));
+                    }
+                  },
+                  child: const Text('Escolher imagem'),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-                decoration:
-                    const InputDecoration(hintText: "Nome do móvel antigo"),
+                child: const Text("Cancelar"),
               ),
-              TextFormField(
-                onChanged: (value) {
-                  nomeMovelNovo =
-                      value; // Atualiza o novo valor do campo de texto
+              TextButton(
+                onPressed: () {
+                  BlocProvider.of<MoveisBloc>(context).add(AdicionarMovelEvent(
+                      nomeMovel, apartmentId!, imagemMovel));
+                  scaffoldMessenger.showSnackBar(const SnackBar(
+                    content: Text('Item adicionado com sucesso!'),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 2),
+                  ));
+                  Navigator.pop(context);
                 },
-                decoration:
-                    const InputDecoration(hintText: "Nome do móvel novo"),
+                child: const Text("Adicionar"),
               ),
             ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
+          );
+        },
+      );
+    },
+  );
+}
+
+void _editarMovel(
+    BuildContext context, ScaffoldMessengerState scaffoldMessenger) {
+  String movelAntigo = ''; // Variável para armazenar o valor do campo de texto
+  String movelNovo = ''; // Variável para armazenar o valor do campo de texto
+
+  // Define as variáveis userId e apartmentId com os valores corretos
+  final apartmentBloc = BlocProvider.of<ApartmentBloc>(context);
+  final apartmentId = apartmentBloc.state.selectedApartment;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Editar Móvel"),
+        content: Column(
+          children: [
+            TextFormField(
+              onChanged: (value) {
+                movelAntigo = value; // Atualiza o valor do campo de texto
               },
-              child: const Text("Cancelar"),
+              decoration:
+                  const InputDecoration(hintText: "Nome do móvel antigo"),
             ),
-            TextButton(
-              onPressed: () {
-                BlocProvider.of<MoveisBloc>(context).add(AtualizarMovelEvent(
-                    nomeMovelAntigo,
-                    nomeMovelNovo)); // Passa os valores antigo e novo do campo de texto para o evento
-                scaffoldMessenger.showSnackBar(const SnackBar(
-                  content: Text('Item atualizado com sucesso!'),
-                  backgroundColor: Colors.blue,
-                  duration: Duration(seconds: 2),
-                ));
-                Navigator.pop(context);
+            TextFormField(
+              onChanged: (value) {
+                movelNovo = value; // Atualiza o valor do campo de texto
               },
-              child: const Text("Atualizar"),
+              decoration: const InputDecoration(hintText: "Nome do móvel novo"),
             ),
           ],
-        );
-      },
-    );
-  }
-
-  void _excluirMovel(
-      BuildContext context, ScaffoldMessengerState scaffoldMessenger) {
-    String nomeMovel = ''; // Variável para armazenar o valor do campo de texto
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Excluir Móvel"),
-          content: TextFormField(
-            onChanged: (value) {
-              nomeMovel = value; // Atualiza o valor do campo de texto
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
             },
-            decoration: const InputDecoration(hintText: "Nome do móvel"),
+            child: const Text("Cancelar"),
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () {
-                BlocProvider.of<MoveisBloc>(context).add(RemoverMovelEvent(
-                    nomeMovel)); // Passa o valor do campo de texto para o evento
-                scaffoldMessenger.showSnackBar(const SnackBar(
-                  content: Text('Item excluído com sucesso!'),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 2),
-                ));
-                Navigator.pop(context);
-              },
-              child: const Text("Excluir"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+          TextButton(
+            onPressed: () {
+              BlocProvider.of<MoveisBloc>(context).add(AtualizarMovelEvent(
+                  movelAntigo,
+                  movelNovo,
+                  apartmentId!)); // Passa os valores corretos para o evento
+              scaffoldMessenger.showSnackBar(const SnackBar(
+                content: Text('Item editado com sucesso!'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ));
+              Navigator.pop(context);
+            },
+            child: const Text("Editar"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _excluirMovel(
+    BuildContext context, ScaffoldMessengerState scaffoldMessenger) {
+  String movel = ''; // Variável para armazenar o valor do campo de texto
+
+  // Define as variáveis userId e apartmentId com os valores corretos
+  final apartmentBloc = BlocProvider.of<ApartmentBloc>(context);
+  final apartmentId = apartmentBloc.state.selectedApartment;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Excluir Móvel"),
+        content: TextFormField(
+          onChanged: (value) {
+            movel = value; // Atualiza o valor do campo de texto
+          },
+          decoration: const InputDecoration(hintText: "Nome do móvel"),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Cancelar"),
+          ),
+          TextButton(
+            onPressed: () {
+              BlocProvider.of<MoveisBloc>(context).add(RemoverMovelEvent(movel,
+                  apartmentId!)); // Passa os valores corretos para o evento
+              scaffoldMessenger.showSnackBar(const SnackBar(
+                content: Text('Item excluído com sucesso!'),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ));
+              Navigator.pop(context);
+            },
+            child: const Text("Excluir"),
+          ),
+        ],
+      );
+    },
+  );
 }
