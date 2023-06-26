@@ -32,14 +32,33 @@ class Moveis extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<Map<String, dynamic>> moveis = snapshot.data!;
-                return ListView.builder(
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3),
                   itemCount: moveis.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: moveis[index]['imageUrl'] != null
-                          ? Image.network(moveis[index]['imageUrl'])
-                          : null,
-                      title: Text(moveis[index]['name']),
+                    return InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text(moveis[index]['name']),
+                              content: moveis[index]['imageUrl'] != null
+                                  ? Image.network(moveis[index]['imageUrl'])
+                                  : null,
+                            );
+                          },
+                        );
+                      },
+                      child: moveis[index]['imageUrl'] != null
+                          ? ClipRRect(
+                              child: Image.network(
+                                moveis[index]['imageUrl'],
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                     );
                   },
                 );

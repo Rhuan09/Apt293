@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     HomeContentScreen(),
     Moveis(),
-    GastosFixos(),
+    GastosFixosPage(),
     GastosVariaveis(),
   ];
 

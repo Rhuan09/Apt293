@@ -1,3 +1,4 @@
+import 'package:att_2_flutter/colors.dart';
 import 'package:att_2_flutter/createaccount.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _LoginState extends State<Login> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.purple,
+                  color: AppColors.textColor,
                 ),
               ),
               const SizedBox(height: 40),
@@ -90,7 +91,7 @@ class _LoginState extends State<Login> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
+                  backgroundColor: AppColors.textColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                   padding:
@@ -111,7 +112,7 @@ class _LoginState extends State<Login> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
+                  backgroundColor: AppColors.textColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                   padding:
