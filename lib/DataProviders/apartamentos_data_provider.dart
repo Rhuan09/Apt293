@@ -7,6 +7,7 @@ class ApartamentosDataProvider {
   Future<List<String>> getApartments(String userId) async {
     final snapshot =
         await _firestore.collection('apartments').doc(userId).get();
+
     if (snapshot.exists) {
       return List<String>.from(snapshot.data()?['apartments'] ?? []);
     } else {
@@ -18,6 +19,7 @@ class ApartamentosDataProvider {
   Future<void> addApartment(String userId, String apartment) async {
     final snapshot =
         await _firestore.collection('apartments').doc(userId).get();
+
     if (snapshot.exists) {
       final apartments = List<String>.from(snapshot.data()?['apartments'] ?? [])
         ..add(apartment);

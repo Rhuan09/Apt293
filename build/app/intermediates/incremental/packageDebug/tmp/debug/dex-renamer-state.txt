@@ -1,4 +1,4 @@
-#Mon Jun 26 04:55:36 BRT 2023
+#Tue Jun 27 12:57:42 BRT 2023
 base.2=C\:\\Users\\rhuan\\OneDrive\\Documentos\\GitHub\\Att_2_Flutter\\att_2_flutter\\Apt293\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes3.dex
 path.2=classes3.dex
 base.1=C\:\\Users\\rhuan\\OneDrive\\Documentos\\GitHub\\Att_2_Flutter\\att_2_flutter\\Apt293\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes2.dex

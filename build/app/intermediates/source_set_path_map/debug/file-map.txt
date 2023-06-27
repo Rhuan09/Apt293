@@ -32,7 +32,8 @@ com.example.att_2_flutter.app-packaged_res-30 C:\Users\rhuan\OneDrive\Documentos
 com.example.att_2_flutter.app-packaged_res-31 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\firebase_core\intermediates\packaged_res\debug
 com.example.att_2_flutter.app-packaged_res-32 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\firebase_storage\intermediates\packaged_res\debug
 com.example.att_2_flutter.app-packaged_res-33 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\flutter_plugin_android_lifecycle\intermediates\packaged_res\debug
-com.example.att_2_flutter.app-packaged_res-34 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\google_sign_in_android\intermediates\packaged_res\debug
-com.example.att_2_flutter.app-packaged_res-35 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\image_picker_android\intermediates\packaged_res\debug
-com.example.att_2_flutter.app-packaged_res-36 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\path_provider_android\intermediates\packaged_res\debug
-com.example.att_2_flutter.app-packaged_res-37 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\permission_handler_android\intermediates\packaged_res\debug
+com.example.att_2_flutter.app-packaged_res-34 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\fluttertoast\intermediates\packaged_res\debug
+com.example.att_2_flutter.app-packaged_res-35 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\google_sign_in_android\intermediates\packaged_res\debug
+com.example.att_2_flutter.app-packaged_res-36 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\image_picker_android\intermediates\packaged_res\debug
+com.example.att_2_flutter.app-packaged_res-37 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\path_provider_android\intermediates\packaged_res\debug
+com.example.att_2_flutter.app-packaged_res-38 C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\permission_handler_android\intermediates\packaged_res\debug

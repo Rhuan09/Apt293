@@ -43,6 +43,10 @@ dependencies:
   firebase_storage:
   permission_handler:
   pie_chart:
+  fluttertoast:
+  flutter_hooks: 
+  rflutter_alert:
+
   
 
 

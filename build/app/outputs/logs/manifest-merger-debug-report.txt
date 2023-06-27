@@ -62,6 +62,7 @@ MERGED from [:firebase_core] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flu
 MERGED from [:permission_handler_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\permission_handler_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:image_picker_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-21:12
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
+MERGED from [:fluttertoast] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\fluttertoast\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:path_provider_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:google_sign_in_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\google_sign_in_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\rhuan\.gradle\caches\transforms-3\667df562e5afe27ce361bb566a9ccc9a\transformed\multidex-2.0.0\AndroidManifest.xml:17:1-22:12
@@ -164,6 +165,8 @@ MERGED from [:image_picker_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\At
 MERGED from [:image_picker_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\image_picker_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:flutter_plugin_android_lifecycle] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\flutter_plugin_android_lifecycle\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:fluttertoast] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\fluttertoast\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:fluttertoast] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\fluttertoast\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:path_provider_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:path_provider_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:google_sign_in_android] C:\Users\rhuan\OneDrive\Documentos\GitHub\Att_2_Flutter\att_2_flutter\Apt293\build\google_sign_in_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
