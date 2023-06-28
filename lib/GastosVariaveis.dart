@@ -17,14 +17,14 @@ class GastosVariaveis extends StatelessWidget {
     final apartmentId = apartmentBloc.state.selectedApartment;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Gastos Variáveis'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        appBar: AppBar(
+          backgroundColor: AppColors.textColor,
+          title: Text('Gastos Variáveis'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             // Exibidor de gastos variáveis atuais
             Card(
               child: Padding(
@@ -56,43 +56,114 @@ class GastosVariaveis extends StatelessWidget {
                         }
                       },
                     ),
+                    Column(
+                      children: [
+                        ListTile(
+                          leading: Icon(Icons.local_pizza),
+                          title: Text('Alimentação'),
+                          trailing: BlocBuilder<GastosVariaveisBloc,
+                              GastosVariaveisState>(
+                            builder: (context, state) {
+                              if (state is GastosVariaveisListadosState) {
+                                final totalAlimentacao = state.gastosvariaveis
+                                    .where((element) =>
+                                        element['tipo'] == 'Alimentação')
+                                    .fold(
+                                        0,
+                                        (previousValue, element) =>
+                                            previousValue +
+                                            int.parse(
+                                                element['valor'].toString()));
+                                return Text('R\$ $totalAlimentacao');
+                              } else {
+                                return Text('Carregando...');
+                              }
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.build),
+                          title: Text('Reparos'),
+                          trailing: BlocBuilder<GastosVariaveisBloc,
+                              GastosVariaveisState>(
+                            builder: (context, state) {
+                              if (state is GastosVariaveisListadosState) {
+                                final totalReparos = state.gastosvariaveis
+                                    .where((element) =>
+                                        element['tipo'] == 'Reparos')
+                                    .fold(
+                                        0,
+                                        (previousValue, element) =>
+                                            previousValue +
+                                            int.parse(
+                                                element['valor'].toString()));
+                                return Text('R\$ $totalReparos');
+                              } else {
+                                return Text('Carregando...');
+                              }
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.soap),
+                          title: Text('Limpeza'),
+                          trailing: BlocBuilder<GastosVariaveisBloc,
+                              GastosVariaveisState>(
+                            builder: (context, state) {
+                              if (state is GastosVariaveisListadosState) {
+                                final totalLimpeza = state.gastosvariaveis
+                                    .where((element) =>
+                                        element['tipo'] == 'Limpeza')
+                                    .fold(
+                                        0,
+                                        (previousValue, element) =>
+                                            previousValue +
+                                            int.parse(
+                                                element['valor'].toString()));
+                                return Text('R\$ $totalLimpeza');
+                              } else {
+                                return Text('Carregando...');
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
             ),
             SizedBox(height: 16.0),
             // Botões para adicionar gastos
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Column(
               children: [
-                // Botão para adicionar gastos de mercado
+                // Botão para adicionar gastos
                 ElevatedButton(
                   onPressed: () {
                     _adicionarGastos(context, ScaffoldMessenger.of(context));
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.orange,
+                    primary: AppColors.textColor,
                     onPrimary: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(3)),
                   ),
                   child: Text('Adicionar Gastos'),
                 ),
-                // Botão para adicionar gastos de manutenção
+                SizedBox(height: 16.0),
+                // Botão para abrir popup com lista de todos os gastos
+                ElevatedButton(
+                  onPressed: () {
+                    _exibirGastos(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.textColor),
+                  child: Text('Ver lista de gastos'),
+                ),
               ],
-            ),
-            SizedBox(height: 16.0),
-            // Botão para abrir popup com lista de todos os gastos
-            ElevatedButton(
-              onPressed: () {
-                _exibirGastos(context);
-              },
-              child: Text('Ver lista de gastos'),
-            ),
-          ],
-        ),
-      ),
-    );
+            )
+          ]),
+        ));
   }
 
   void _editarGastos(
@@ -123,7 +194,7 @@ class GastosVariaveis extends StatelessWidget {
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-                title: const Text("Adicionar Móvel"),
+                title: const Text("Adicionar um gasto!"),
                 content: Column(mainAxisSize: MainAxisSize.min, children: [
                   TextFormField(
                     onChanged: (value) {
@@ -140,6 +211,8 @@ class GastosVariaveis extends StatelessWidget {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
+                    decoration: const InputDecoration(
+                        hintText: "Insira o valor do gasto"),
                   ),
                   DropdownButtonFormField<String>(
                     onChanged: (String? newValue) {
@@ -148,6 +221,8 @@ class GastosVariaveis extends StatelessWidget {
                             newValue!; // atualiza o valor de tipoGasto com o valor escolhido pelo usuário
                       });
                     },
+                    decoration:
+                        const InputDecoration(hintText: "Selecione o tipo"),
                     items: [
                       DropdownMenuItem(
                         child: Text('Alimentação'),

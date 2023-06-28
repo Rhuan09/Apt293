@@ -1,3 +1,4 @@
+import 'package:att_2_flutter/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Blocs/apartamentos_bloc.dart';
@@ -16,6 +17,7 @@ class _CreateApartmentScreenState extends State<CreateApartmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.textColor,
         title: Text('Criar novo apartamento'),
       ),
       body: Padding(

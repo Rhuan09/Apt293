@@ -94,35 +94,38 @@ class _GastosFixosPageState extends State<GastosFixosPage> {
                 ),
                 const SizedBox(height: 60),
                 Expanded(
-                  child: PieChart(
-                    dataMap: gastosFixos,
-                    animationDuration: Duration(milliseconds: 800),
-                    chartLegendSpacing: 32,
-                    chartRadius: MediaQuery.of(context).size.width / 2,
-                    colorList: [
-                      Colors.yellow,
-                      Colors.blue,
-                      Colors.green,
-                    ],
-                    initialAngleInDegree: 0,
-                    chartType: ChartType.disc,
-                    legendOptions: LegendOptions(
-                      showLegendsInRow: false,
-                      legendPosition: LegendPosition.right,
-                      showLegends: true,
-                      legendShape: BoxShape.circle,
-                      legendTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    chartValuesOptions: ChartValuesOptions(
-                        showChartValueBackground: true,
-                        showChartValues: true,
-                        showChartValuesInPercentage: true,
-                        showChartValuesOutside: false,
-                        decimalPlaces: 1),
-                  ),
+                  child: gastosFixos.isEmpty
+                      ? Center(
+                          child: Text('Nenhum gasto fixo adicionado ainda.'))
+                      : PieChart(
+                          dataMap: gastosFixos,
+                          animationDuration: Duration(milliseconds: 800),
+                          chartLegendSpacing: 32,
+                          chartRadius: MediaQuery.of(context).size.width / 2,
+                          colorList: [
+                            Color.fromARGB(255, 255, 153, 0),
+                            Colors.blue,
+                            Color.fromARGB(255, 9, 167, 164),
+                          ],
+                          initialAngleInDegree: 0,
+                          chartType: ChartType.disc,
+                          legendOptions: LegendOptions(
+                            showLegendsInRow: false,
+                            legendPosition: LegendPosition.right,
+                            showLegends: true,
+                            legendShape: BoxShape.circle,
+                            legendTextStyle:
+                                TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          chartValuesOptions: ChartValuesOptions(
+                              showChartValueBackground: true,
+                              showChartValues: true,
+                              showChartValuesInPercentage: true,
+                              showChartValuesOutside: false,
+                              decimalPlaces: 1),
+                        ),
                 ),
-                const SizedBox(
-                    height: 90), // Adiciona um espaçamento de 16 pixels
+                const SizedBox(height: 90),
                 Expanded(
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
