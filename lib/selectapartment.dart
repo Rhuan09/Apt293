@@ -4,6 +4,7 @@ import 'Blocs/apartamentos_bloc.dart';
 import 'homescreen.dart';
 import 'createapartment.dart';
 import 'Blocs/gastosfixos_bloc.dart';
+import 'Blocs/gastosvariaveis_bloc.dart';
 
 class SelectApartmentScreen extends StatefulWidget {
   const SelectApartmentScreen({Key? key}) : super(key: key);
@@ -30,6 +31,9 @@ class _SelectApartmentScreenState extends State<SelectApartmentScreen> {
         context
             .read<GastosFixosBloc>()
             .add(ApartamentoSelecionado(state.selectedApartment));
+        context
+            .read<GastosVariaveisBloc>()
+            .add(ListarGastosVariaveisEvent(state.selectedApartment!));
       },
       child: Scaffold(
         appBar: AppBar(

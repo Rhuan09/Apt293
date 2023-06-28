@@ -1,6 +1,8 @@
 import 'package:att_2_flutter/Blocs/gastosfixos_bloc.dart';
+import 'package:att_2_flutter/Blocs/gastosvariaveis_bloc.dart';
 import 'package:att_2_flutter/DataProviders/apartamentos_data_provider.dart';
 import 'package:att_2_flutter/DataProviders/gastosfixos_data_provider.dart';
+import 'package:att_2_flutter/DataProviders/gastosvariaveis_data_provider.dart';
 import 'package:att_2_flutter/GastosFixos.dart';
 import 'package:att_2_flutter/GastosVariaveis.dart';
 import 'Login.dart';
@@ -25,6 +27,7 @@ void main() async {
   final moveisDataProvider = MoveisDataProvider();
   final apartamentosDataProvider = ApartamentosDataProvider();
   final gastosFixosDataProvider = GastosFixosDataProvider();
+  final gastosVariaveisDataProvider = GastosVariaveisDataProvider();
 
   runApp(
     MultiProvider(
@@ -41,7 +44,10 @@ void main() async {
             create: (context) => GastosFixosBloc(
                   dataProvider: gastosFixosDataProvider,
                   apartmentBloc: context.read<ApartmentBloc>(),
-                ))
+                )),
+        BlocProvider(
+            create: (context) =>
+                GastosVariaveisBloc(gastosVariaveisDataProvider)),
       ],
       child: MyApp(),
     ),
