@@ -14,6 +14,10 @@ class Moveis extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apartmentBloc = BlocProvider.of<ApartmentBloc>(context);
+    final apartmentId = apartmentBloc.state.selectedApartment;
+    BlocProvider.of<MoveisBloc>(context).add(ListarMoveisEvent(apartmentId!));
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -27,11 +31,10 @@ class Moveis extends StatelessWidget {
           // Acessa o apartamento selecionado a partir do estado do ApartmentBloc
           String? selectedApartment = apartmentState.selectedApartment;
 
-          return FutureBuilder<List<Map<String, dynamic>>>(
-            future: _getMoveis(context, selectedApartment),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<Map<String, dynamic>> moveis = snapshot.data!;
+          return BlocBuilder<MoveisBloc, MoveisState>(
+            builder: (context, moveisState) {
+              if (moveisState is MoveisListadosState) {
+                List<Map<String, dynamic>> moveis = moveisState.moveis;
                 return GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3),
@@ -62,9 +65,9 @@ class Moveis extends StatelessWidget {
                     );
                   },
                 );
-              } else if (snapshot.hasError) {
+              } else if (moveisState is MovelErrorState) {
                 return Center(
-                  child: Text(snapshot.error.toString()),
+                  child: Text(moveisState.message),
                 );
               } else {
                 return const Center(
@@ -224,6 +227,8 @@ void _adicionarMovel(
                     duration: Duration(seconds: 2),
                   ));
                   Navigator.pop(context);
+                  BlocProvider.of<MoveisBloc>(context)
+                      .add(ListarMoveisEvent(apartmentId));
                 },
                 child: const Text("Adicionar"),
               ),
@@ -329,6 +334,9 @@ void _excluirMovel(
                 backgroundColor: Colors.green,
                 duration: Duration(seconds: 2),
               ));
+              BlocProvider.of<MoveisBloc>(context)
+                  .add(ListarMoveisEvent(apartmentId));
+
               Navigator.pop(context);
             },
             child: const Text("Excluir"),
